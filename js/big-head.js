@@ -1,6 +1,11 @@
 class BigHead extends Phaser.Scene {
   constructor() {
     super('BigHead');
+    this.position = {
+      x: config.width / 2,
+      y: config.height / 2
+    };
+    this.speed = 1;
   }
 
   preload() {
@@ -18,13 +23,27 @@ class BigHead extends Phaser.Scene {
       repeat: -1
     });
 
-    this.man = this.add.sprite(config.width / 2, config.height / 2, 'man');
+    this.man = this.add.sprite(this.position.x, this.position.y, 'man');
     this.man.play('man_anim');
-    this.input.on('pointerdown', this.moveBighead, this);
+    this.input.on('pointerdown', this.setPosition, this);
   }
 
-  moveBighead(pointer) {
-    this.man.x = pointer.x;
-    this.man.y = pointer.y;
+  setPosition(pointer) {
+    this.position.x = pointer.x;
+    this.position.y = pointer.y;
+  }
+
+  update() {
+    if (this.man.x < this.position.x) {
+      this.man.x += this.speed;
+    } else if (this.man.x > this.position.x) {
+      this.man.x -= this.speed;
+    }
+
+    if (this.man.y < this.position.y) {
+      this.man.y += this.speed;
+    } else if (this.man.y > this.position.y) {
+      this.man.y -= this.speed;
+    }
   }
 }
