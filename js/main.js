@@ -1,6 +1,6 @@
 var config = {
-  width: 32,
-  height: 32,
+  width: 480,
+  height: 640,
   backgroundColor: 0xFFFFFF,
   scene: [BigHead]
 };

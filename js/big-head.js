@@ -20,5 +20,11 @@ class BigHead extends Phaser.Scene {
 
     this.man = this.add.sprite(config.width / 2, config.height / 2, 'man');
     this.man.play('man_anim');
+    this.input.on('pointerdown', this.moveBighead, this);
+  }
+
+  moveBighead(pointer) {
+    this.man.x = pointer.x;
+    this.man.y = pointer.y;
   }
 }
