@@ -33,17 +33,14 @@ class BigHead extends Phaser.Scene {
     this.position.y = pointer.y;
   }
 
-  update() {
-    if (this.man.x < this.position.x) {
-      this.man.x += this.speed;
-    } else if (this.man.x > this.position.x) {
-      this.man.x -= this.speed;
-    }
+  getMovingWeight() {
+    var angle = Math.atan2(this.position.y - this.man.y, this.position.x - this.man.x);
+    return { x: Math.cos(angle), y: Math.sin(angle) };
+  }
 
-    if (this.man.y < this.position.y) {
-      this.man.y += this.speed;
-    } else if (this.man.y > this.position.y) {
-      this.man.y -= this.speed;
-    }
+  update() {
+    var weight = this.getMovingWeight();
+    this.man.x += (this.speed * weight.x);
+    this.man.y += (this.speed * weight.y);
   }
 }
