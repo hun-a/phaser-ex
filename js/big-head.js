@@ -15,6 +15,11 @@ class BigHead extends Phaser.Scene {
     );
   }
 
+  setPosition(pointer) {
+    this.position.x = pointer.x;
+    this.position.y = pointer.y;
+  }
+
   create() {
     this.anims.create({
       key: 'man_anim',
@@ -28,19 +33,18 @@ class BigHead extends Phaser.Scene {
     this.input.on('pointerdown', this.setPosition, this);
   }
 
-  setPosition(pointer) {
-    this.position.x = pointer.x;
-    this.position.y = pointer.y;
-  }
-
   getMovingWeight() {
     var angle = Math.atan2(this.position.y - this.man.y, this.position.x - this.man.x);
     return { x: Math.cos(angle), y: Math.sin(angle) };
   }
 
-  update() {
+  moveTheMan() {
     var weight = this.getMovingWeight();
     this.man.x += (this.speed * weight.x);
     this.man.y += (this.speed * weight.y);
+  }
+
+  update() {
+    this.moveTheMan();
   }
 }
