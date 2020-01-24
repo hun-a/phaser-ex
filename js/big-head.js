@@ -45,19 +45,19 @@ class BigHead extends Phaser.Scene {
     this.anims.create({
       key: 'man_anim',
       frames: this.anims.generateFrameNumbers('man'),
-      frameRate: 10,
+      frameRate: 12,
       repeat: -1
     });
     this.anims.create({
       key: 'blue_potion_anim',
       frames: this.anims.generateFrameNumbers('blue_potion'),
-      frameRate: 10,
+      frameRate: 12,
       repeat: -1
     });
     this.anims.create({
       key: 'red_potion_anim',
       frames: this.anims.generateFrameNumbers('red_potion'),
-      frameRate: 10,
+      frameRate: 12,
       repeat: -1
     });
 
@@ -78,7 +78,6 @@ class BigHead extends Phaser.Scene {
   }
 
   moveTheMan() {
-    console.log(this.speed)
     var weight = this.getMovingWeight();
     this.man.x += (this.speed * weight.x);
     this.man.y += (this.speed * weight.y);
