@@ -77,7 +77,19 @@ class BigHead extends Phaser.Scene {
     return { x: Math.cos(angle), y: Math.sin(angle) };
   }
 
+  isReach() {
+    var x = Math.round(this.man.x);
+    var y = Math.round(this.man.y);
+
+    return [x - 2, x - 1, x, x + 1, x + 2].includes(this.position.x) &&
+      [y - 2, y - 1, y, y + 1, y + 2].includes(this.position.y);
+  }
+
   moveTheMan() {
+    if (this.isReach()) {
+      return;
+    }
+
     var weight = this.getMovingWeight();
     this.man.x += (this.speed * weight.x);
     this.man.y += (this.speed * weight.y);
