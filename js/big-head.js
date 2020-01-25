@@ -22,6 +22,7 @@ class BigHead extends Phaser.Scene {
       'red_potion', 'assets/spritesheets/red_potion.png',
       { frameWidth: 32, frameHeight: 32 }
     );
+    this.load.image('cannon', 'assets/spritesheets/cannon.png');
   }
 
   setPosition(pointer) {
@@ -29,18 +30,40 @@ class BigHead extends Phaser.Scene {
     this.position.y = pointer.y;
   }
 
+  displayLife() {
+    this.lifeContainer.text = `Life: ${this.life}`;
+  }
+
+  displaySpeed() {
+    this.speedContainer.text = `Speed: ${this.speed === 5 ? 'Max' : this.speed}`;
+  }
+
+  collideToCannon(man, cannon) {
+    this.life -= 1;
+    this.displayLife();
+    var pushTo = 20;
+    if (man.x > cannon.x) {
+      man.x += pushTo;
+    } else if (man.x < cannon.x) {
+      man.x -= pushTo;
+    }
+    man.y -= pushTo;
+    this.position.x = man.x;
+    this.position.y = man.y;
+  }
+
   increaseMoving(man, potion) {
     this.speed = Math.min(this.speed + 1, 5);
     potion.disableBody(true, true);
     this.bluePotions.children.entries.pop();
-    this.speedContainer.text = `Speed: ${this.speed === 5 ? 'Max' : this.speed}`;
+    this.displaySpeed();
   }
 
   heal(man, potion) {
     this.life = Math.min(this.life + 1, 3);
     potion.disableBody(true, true);
     this.redPotions.children.entries.pop();
-    this.lifeContainer.text = `Life: ${this.life}`;
+    this.displayLife();
   }
 
   create() {
@@ -63,6 +86,8 @@ class BigHead extends Phaser.Scene {
       repeat: -1
     });
 
+    this.cannon = this.physics.add.image(config.width / 2, config.height - 8, 'cannon');
+
     this.man = this.physics.add.sprite(this.position.x, this.position.y, 'man');
     this.man.play('man_anim');
     this.input.on('pointerdown', this.setPosition, this);
@@ -70,11 +95,12 @@ class BigHead extends Phaser.Scene {
     this.bluePotions = this.physics.add.group();
     this.redPotions = this.physics.add.group();
 
+    this.physics.add.collider(this.man, this.cannon, this.collideToCannon, null, this);
     this.physics.add.overlap(this.man, this.bluePotions, this.increaseMoving, null, this);
     this.physics.add.overlap(this.man, this.redPotions, this.heal, null, this);
 
     this.lifeContainer = this.add.text(20, 20, `Life: ${this.life}`, { font: '20px Arial', fill: 'black' });
-    this.speedContainer = this.add.text(100, 20, `Speed: ${this.speed}`, { font: '20px Arial', fill: 'black' });
+    this.speedContainer = this.add.text(120, 20, `Speed: ${this.speed}`, { font: '20px Arial', fill: 'black' });
   }
 
   getMovingWeight() {
