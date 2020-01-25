@@ -33,13 +33,14 @@ class BigHead extends Phaser.Scene {
     this.speed = Math.min(this.speed + 1, 5);
     potion.disableBody(true, true);
     this.bluePotions.children.entries.pop();
+    this.speedContainer.text = `Speed: ${this.speed === 5 ? 'Max' : this.speed}`;
   }
 
   heal(man, potion) {
     this.life = Math.min(this.life + 1, 3);
-    this.lifeContainer.text = `Life: ${this.life}`;
     potion.disableBody(true, true);
     this.redPotions.children.entries.pop();
+    this.lifeContainer.text = `Life: ${this.life}`;
   }
 
   create() {
@@ -73,6 +74,7 @@ class BigHead extends Phaser.Scene {
     this.physics.add.overlap(this.man, this.redPotions, this.heal, null, this);
 
     this.lifeContainer = this.add.text(20, 20, `Life: ${this.life}`, { font: '20px Arial', fill: 'black' });
+    this.speedContainer = this.add.text(100, 20, `Speed: ${this.speed}`, { font: '20px Arial', fill: 'black' });
   }
 
   getMovingWeight() {
