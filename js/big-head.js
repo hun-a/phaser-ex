@@ -50,6 +50,8 @@ class BigHead extends Phaser.Scene {
     man.y -= pushTo;
     this.position.x = man.x;
     this.position.y = man.y;
+    this.man.x = man.x;
+    this.man.y = man.y;
   }
 
   increaseMoving(man, potion) {
@@ -86,7 +88,8 @@ class BigHead extends Phaser.Scene {
       repeat: -1
     });
 
-    this.cannon = this.physics.add.image(config.width / 2, config.height - 8, 'cannon');
+    this.cannon = this.physics.add.image(config.width / 2, config.height + 10, 'cannon');
+    this.cannon.setOrigin(0.5, 0.8);
 
     this.man = this.physics.add.sprite(this.position.x, this.position.y, 'man');
     this.man.play('man_anim');
@@ -103,8 +106,12 @@ class BigHead extends Phaser.Scene {
     this.speedContainer = this.add.text(120, 20, `Speed: ${this.speed}`, { font: '20px Arial', fill: 'black' });
   }
 
+  getRadian(from, to) {
+    return Math.atan2(to.y - from.y, to.x - from.x);
+  }
+
   getMovingWeight() {
-    var angle = Math.atan2(this.position.y - this.man.y, this.position.x - this.man.x);
+    var angle = this.getRadian(this.man, this.position);
     return { x: Math.cos(angle), y: Math.sin(angle) };
   }
 
@@ -148,9 +155,19 @@ class BigHead extends Phaser.Scene {
     }
   }
 
+  getAngle(from, to) {
+    return this.getRadian(from, to) * (180 / Math.PI);
+  }
+
+  rotateCannon() {
+    var angle = this.getAngle(this.cannon, this.man) + 90;
+    this.cannon.angle = angle;
+  }
+
   update() {
     this.moveTheMan();
     this.createBluePotion();
     this.createRedPotion();
+    this.rotateCannon();
   }
 }
