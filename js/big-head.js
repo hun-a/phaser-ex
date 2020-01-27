@@ -7,6 +7,7 @@ class BigHead extends Phaser.Scene {
     };
     this.speed = 1;
     this.life = 3;
+    this.bulletSpeed = 40;
   }
 
   preload() {
@@ -22,7 +23,8 @@ class BigHead extends Phaser.Scene {
       'red_potion', 'assets/spritesheets/red_potion.png',
       { frameWidth: 32, frameHeight: 32 }
     );
-    this.load.image('cannon', 'assets/spritesheets/cannon.png');
+    this.load.image('cannon', 'assets/images/cannon.png');
+    this.load.image('bullet', 'assets/images/bullet.png')
   }
 
   setPosition(pointer) {
@@ -97,6 +99,7 @@ class BigHead extends Phaser.Scene {
 
     this.bluePotions = this.physics.add.group();
     this.redPotions = this.physics.add.group();
+    this.projectiles = this.add.group();
 
     this.physics.add.collider(this.man, this.cannon, this.collideToCannon, null, this);
     this.physics.add.overlap(this.man, this.bluePotions, this.increaseMoving, null, this);
@@ -164,10 +167,18 @@ class BigHead extends Phaser.Scene {
     this.cannon.angle = angle;
   }
 
-  update() {
+  shootBullet(time, delta) {
+    // FIXME
+    if (Math.round(time % 10000 / 1000) % 3 === 0) {
+      var bullet = new Bullet(this, delta);
+    }
+  }
+
+  update(time, delta) {
     this.moveTheMan();
     this.createBluePotion();
     this.createRedPotion();
     this.rotateCannon();
+    this.shootBullet(time, delta);
   }
 }
