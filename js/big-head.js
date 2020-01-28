@@ -7,7 +7,7 @@ class BigHead extends Phaser.Scene {
     };
     this.speed = 1;
     this.life = 3;
-    this.bulletSpeed = 40;
+    this.bulletSpeed = 400;
   }
 
   preload() {
@@ -74,6 +74,17 @@ class BigHead extends Phaser.Scene {
     var bullet = new Bullet(scene);
   }
 
+  increaseBulletSpeed(scene) {
+    if (scene.bulletSpeed) {
+      scene.bulletSpeed -= 50;
+    } else {
+      // Add the new Cannon and reset the bullet speed
+    }
+    console.log({
+      speed: scene.bulletSpeed
+    })
+  }
+
   create() {
     this.anims.create({
       key: 'man_anim',
@@ -112,7 +123,18 @@ class BigHead extends Phaser.Scene {
     this.lifeContainer = this.add.text(20, 20, `Life: ${this.life}`, { font: '20px Arial', fill: 'black' });
     this.speedContainer = this.add.text(120, 20, `Speed: ${this.speed}`, { font: '20px Arial', fill: 'black' });
 
-    setInterval(this.shootBullet, 1000, this);
+    this.time.addEvent({
+      delay: 1000,
+      callback: this.shootBullet,
+      args: [this],
+      loop: true
+    });
+    this.time.addEvent({
+      delay: 1000 * 10,
+      callback: this.increaseBulletSpeed,
+      args: [this],
+      loop: true
+    });
   }
 
   getRadian(from, to) {
