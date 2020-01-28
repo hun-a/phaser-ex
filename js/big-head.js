@@ -70,6 +70,10 @@ class BigHead extends Phaser.Scene {
     this.displayLife();
   }
 
+  shootBullet(scene) {
+    var bullet = new Bullet(scene);
+  }
+
   create() {
     this.anims.create({
       key: 'man_anim',
@@ -107,6 +111,8 @@ class BigHead extends Phaser.Scene {
 
     this.lifeContainer = this.add.text(20, 20, `Life: ${this.life}`, { font: '20px Arial', fill: 'black' });
     this.speedContainer = this.add.text(120, 20, `Speed: ${this.speed}`, { font: '20px Arial', fill: 'black' });
+
+    setInterval(this.shootBullet, 1000, this);
   }
 
   getRadian(from, to) {
@@ -167,18 +173,10 @@ class BigHead extends Phaser.Scene {
     this.cannon.angle = angle;
   }
 
-  shootBullet(time, delta) {
-    // FIXME
-    if (Math.round(time % 10000 / 1000) % 3 === 0) {
-      var bullet = new Bullet(this, delta);
-    }
-  }
-
-  update(time, delta) {
+  update() {
     this.moveTheMan();
     this.createBluePotion();
     this.createRedPotion();
     this.rotateCannon();
-    this.shootBullet(time, delta);
   }
 }
