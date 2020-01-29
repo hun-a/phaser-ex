@@ -40,20 +40,30 @@ class BigHead extends Phaser.Scene {
     this.speedContainer.text = `Speed: ${this.speed === 5 ? 'Max' : this.speed}`;
   }
 
-  collideToCannon(man, cannon) {
-    this.life -= 1;
-    this.displayLife();
-    var pushTo = 20;
-    if (man.x > cannon.x) {
-      man.x += pushTo;
-    } else if (man.x < cannon.x) {
-      man.x -= pushTo;
+  bounceOff(man, others) {
+    var bounce = 20;
+    if (man.x > others.x) {
+      man.x += bounce;
+    } else if (man.x < others.x) {
+      man.x -= bounce;
     }
-    man.y -= pushTo;
+    man.y -= bounce;
     this.position.x = man.x;
     this.position.y = man.y;
     this.man.x = man.x;
     this.man.y = man.y;
+  }
+
+  collideToCannon(man, cannon) {
+    this.life -= 1;
+    this.displayLife();
+    this.bounceOff(man, cannon);
+  }
+
+  hitTheMan(man, projectile) {
+    this.life -= 1;
+    this.displayLife();
+    projectile.destroy();
   }
 
   increaseMoving(man, potion) {
@@ -114,9 +124,10 @@ class BigHead extends Phaser.Scene {
 
     this.bluePotions = this.physics.add.group();
     this.redPotions = this.physics.add.group();
-    this.projectiles = this.add.group();
+    this.projectiles = this.physics.add.group();
 
     this.physics.add.collider(this.man, this.cannon, this.collideToCannon, null, this);
+    this.physics.add.overlap(this.man, this.projectiles, this.hitTheMan, null, this);
     this.physics.add.overlap(this.man, this.bluePotions, this.increaseMoving, null, this);
     this.physics.add.overlap(this.man, this.redPotions, this.heal, null, this);
 
