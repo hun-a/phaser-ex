@@ -85,14 +85,7 @@ class BigHead extends Phaser.Scene {
   }
 
   increaseBulletSpeed(scene) {
-    if (scene.bulletSpeed) {
-      scene.bulletSpeed += 10;
-    } else {
-      // Add the new Cannon and reset the bullet speed
-    }
-    console.log({
-      speed: scene.bulletSpeed
-    })
+    scene.bulletSpeed += 10;
   }
 
   create() {
