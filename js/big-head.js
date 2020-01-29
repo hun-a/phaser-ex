@@ -7,7 +7,7 @@ class BigHead extends Phaser.Scene {
     };
     this.speed = 1;
     this.life = 3;
-    this.bulletSpeed = 400;
+    this.bulletSpeed = 10;
   }
 
   preload() {
@@ -86,7 +86,7 @@ class BigHead extends Phaser.Scene {
 
   increaseBulletSpeed(scene) {
     if (scene.bulletSpeed) {
-      scene.bulletSpeed -= 50;
+      scene.bulletSpeed += 10;
     } else {
       // Add the new Cannon and reset the bullet speed
     }
@@ -206,10 +206,15 @@ class BigHead extends Phaser.Scene {
     this.cannon.angle = angle;
   }
 
-  update() {
+  applyDelta(delta) {
+    this.delta = delta;
+  }
+
+  update(time, delta) {
     this.moveTheMan();
     this.createBluePotion();
     this.createRedPotion();
     this.rotateCannon();
+    this.applyDelta(delta);
   }
 }
