@@ -126,6 +126,7 @@ class BigHead extends Phaser.Scene {
 
     this.lifeContainer = this.add.text(20, 20, `Life: ${this.life}`, { font: '20px Arial', fill: 'black' });
     this.speedContainer = this.add.text(120, 20, `Speed: ${this.speed}`, { font: '20px Arial', fill: 'black' });
+    this.timeDisplayer = this.add.text(config.width - 100, 20, '0.000', { font: '20px Arial', fill: 'black' });
 
     this.time.addEvent({
       delay: 1000,
@@ -203,11 +204,16 @@ class BigHead extends Phaser.Scene {
     this.delta = delta;
   }
 
+  displayTime(time) {
+    this.timeDisplayer.text = Number(time / 1000).toFixed(3);
+  }
+
   update(time, delta) {
     this.moveTheMan();
     this.createBluePotion();
     this.createRedPotion();
     this.rotateCannon();
     this.applyDelta(delta);
+    this.displayTime(time);
   }
 }
